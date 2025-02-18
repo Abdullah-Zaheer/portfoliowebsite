@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import { motion } from "framer-motion"
-import type React from "react" // Added import for React
+import type React from "react"
 
 const Contact = () => {
   const [formState, setFormState] = useState({
@@ -10,20 +10,55 @@ const Contact = () => {
     email: "",
     message: "",
   })
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    // Handle form submission here (e.g., send data to an API)
-    console.log("Form submitted:", formState)
-    // Reset form after submission
-    setFormState({ name: "", email: "", message: "" })
-  }
+  const [loading, setLoading] = useState(false)
+  const [successMessage, setSuccessMessage] = useState("")
+  const [errorMessage, setErrorMessage] = useState("")
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormState({
       ...formState,
       [e.target.name]: e.target.value,
     })
+  }
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setLoading(true)
+    setSuccessMessage("")
+    setErrorMessage("")
+
+    const formData = new FormData()
+    formData.append("name", formState.name)
+    formData.append("email", formState.email)
+    formData.append("message", formState.message)
+    formData.append("_captcha", "false") // Disable CAPTCHA
+    formData.append("_template", "table") // Email formatting
+    formData.append("_subject", "New Contact Form Submission") // Email subject
+    formData.append("_cc", "contact@abdullahzaheer.me") // Ensure you receive the email
+
+    try {
+      const response = await fetch("https://formsubmit.co/contact@abdullahzaheer.me", {
+        method: "POST",
+        body: formData,
+      })
+
+      if (response.ok) {
+        setSuccessMessage("✅ Your message has been sent successfully!")
+        setErrorMessage("")
+
+        // Reset the form AFTER a short delay
+        setTimeout(() => {
+          setFormState({ name: "", email: "", message: "" }) // Reset form fields
+        }, 500)
+      } else {
+        setErrorMessage("❌ Error submitting form. Please try again.")
+      }
+    } catch (error) {
+      setErrorMessage("❌ An error occurred. Please try again later.")
+      console.error("❌ Error:", error)
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -37,6 +72,7 @@ const Contact = () => {
       >
         Contact Me
       </motion.h2>
+
       <motion.form
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
@@ -87,18 +123,33 @@ const Contact = () => {
             className="w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-primary"
           ></textarea>
         </div>
+
         <motion.button
           type="submit"
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           className="w-full bg-primary text-primary-foreground py-2 px-4 rounded-md hover:bg-primary/90 transition-colors"
+          disabled={loading}
         >
-          Send Message
+          {loading ? "Sending..." : "Send Message"}
         </motion.button>
+
+        {/* Success Message */}
+        {successMessage && (
+          <div className="mt-4 text-center text-sm font-medium text-green-600">
+            {successMessage}
+          </div>
+        )}
+
+        {/* Error Message */}
+        {errorMessage && (
+          <div className="mt-4 text-center text-sm font-medium text-red-600">
+            {errorMessage}
+          </div>
+        )}
       </motion.form>
     </section>
   )
 }
 
 export default Contact
-
