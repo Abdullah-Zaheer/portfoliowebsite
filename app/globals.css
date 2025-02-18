@@ -1,0 +1,109 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 280 50% 98%;
+    --foreground: 280 10% 10%;
+    --card: 280 50% 98%;
+    --card-foreground: 280 10% 10%;
+    --popover: 280 50% 98%;
+    --popover-foreground: 280 10% 10%;
+    --primary: 280 50% 50%;
+    --primary-foreground: 280 50% 98%;
+    --secondary: 280 30% 90%;
+    --secondary-foreground: 280 10% 10%;
+    --muted: 280 30% 90%;
+    --muted-foreground: 280 10% 40%;
+    --accent: 280 30% 90%;
+    --accent-foreground: 280 10% 10%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 280 50% 98%;
+    --border: 280 30% 90%;
+    --input: 280 30% 90%;
+    --ring: 280 50% 50%;
+    --radius: 0.5rem;
+    --primary-rgb: 128, 0, 128;
+  }
+
+  .dark {
+    --background: 40 50% 10%;
+    --foreground: 40 50% 90%;
+    --card: 40 50% 10%;
+    --card-foreground: 40 50% 90%;
+    --popover: 40 50% 10%;
+    --popover-foreground: 40 50% 90%;
+    --primary: 40 50% 50%;
+    --primary-foreground: 40 50% 10%;
+    --secondary: 40 30% 20%;
+    --secondary-foreground: 40 50% 90%;
+    --muted: 40 30% 20%;
+    --muted-foreground: 40 50% 70%;
+    --accent: 40 30% 20%;
+    --accent-foreground: 40 50% 90%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 40 50% 90%;
+    --border: 40 30% 20%;
+    --input: 40 30% 20%;
+    --ring: 40 50% 50%;
+    --primary-rgb: 255, 215, 0;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 1s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.5s ease-out;
+}
+
+@keyframes scaleIn {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
